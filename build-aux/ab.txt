@@ -1,0 +1,157 @@
+apt-get update && apt-get upgrade
+apt-get install git ruby sudo apt-cacher-ng qemu-utils debootstrap python-cheetah python-dev python-pip python2.7-dev lxc libssl-dev parted kpartx bridge-utils
+apt install ubuntu-archive-keyring curl
+sudo apt-get install libboost-all-dev
+sudo apt-get install build-essential libtool autotools-dev autoconf pkg-config libssl-dev
+sudo apt-get install libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler
+sudo apt-get install libqrencode-dev
+sudo add-apt-repository ppa:bitcoin/bitcoin
+sudo apt-get update
+sudo apt-get install libdb4.8-dev libdb4.8++-dev
+
+chmod -R 755 Quantic
+./autogen.sh && ./configure --with-incompatible-bdb && sudo make install
+
+wget http://cn.archive.ubuntu.com/ubuntu/ubuntu/pool/universe/v/vm-builder/vm-builder_0.12.4+bzr494.orig.tar.gz
+tar -zxvf vm-builder_0.12.4+bzr494.orig.tar.gz
+cd vm-builder-0.12.4+bzr494
+sudo python setup.py install
+cd .. 
+
+git clone https://github.com/devrandom/gitian-builder.git
+cd gitian-builder
+bin/make-base-vm --lxc --arch amd64 --suite precise
+cd .. 
+
+sudo pip install scrypt construct==2.5.2
+git clone https://github.com/lhartikk/xcoin-hash
+cd xcoin-hash
+sudo python setup.py install
+cd ..
+git clone https://github.com/lhartikk/GenesisH0 
+
+# generate signature
+openssl ecparam -genkey -name secp256r1 -out main.pem
+openssl ecparam -genkey -name secp256r1 -out mainalert.pem
+openssl ecparam -genkey -name secp256r1 -out testnetalert.pem
+openssl ecparam -genkey -name secp256r1 -out mainspork.pem
+openssl ecparam -genkey -name secp256r1 -out testnetspork.pem
+# output of generated signatures in text
+openssl ec -in main.pem -noout -text
+openssl ec -in mainalert.pem -noout -text
+openssl ec -in testnetalert.pem -noout -text
+openssl ec -in mainspork.pem -noout -text
+openssl ec -in testnetspork.pem -noout -text 
+
+
+
+
+
+
+
+
+python genesis.py -a X11 -z "quantic a big community for the improvement of the future" -p 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1 -t 1555307655
+python genesis.py -a X11 -z "quantic a big community for the improvement of the future" -p 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1 -t 1555307656
+python genesis.py -a X11 -z "quantic a big community for the improvement of the future" -p 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1 -t 1555307657 -b0x207fffff 
+
+
+
+root@n:~# openssl ec -in main.pem -noout -text
+read EC key
+Private-Key: (256 bit)
+priv:
+    58:e0:70:ae:1f:1f:6c:ae:87:39:a4:e3:b2:43:14:
+    7c:0a:b7:74:fb:89:df:95:73:18:02:04:fb:83:de:
+    93:af
+pub: 
+    04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1
+ASN1 OID: prime256v1
+NIST CURVE: P-256
+root@n:~# openssl ec -in mainalert.pem -noout -text
+read EC key
+Private-Key: (256 bit)
+priv:
+    00:f9:aa:d3:e7:75:61:4b:9d:57:67:5b:48:35:d5:
+    66:52:7e:bd:e1:44:94:71:b4:82:01:a3:44:00:87:
+    da:8a:ba
+pub: 
+    044c84f572a7d7ebf580ebc78a16378e648e73d8c48aac1d13974bfecdc943d737a293f01c73587fc0bc8aaac0daa77a1a9712740819f61ac7f6beb4a080ef41c2
+ASN1 OID: prime256v1
+NIST CURVE: P-256
+root@n:~# openssl ec -in testnetalert.pem -noout -text
+read EC key
+Private-Key: (256 bit)
+priv:
+    69:48:37:b8:5e:05:70:9e:3e:5b:80:55:78:1b:55:
+    13:af:a9:2e:c5:df:cf:65:8c:cc:c3:79:8d:40:bc:
+    0b:08
+pub: 
+    0492771cd3c7b1a6c966b44f5bad5816987a91715165fd9aad681cea6fe4821813fa641b631ac7d979baaaa5ef419f8be6b4212399968b348d731044f617aa9794
+ASN1 OID: prime256v1
+NIST CURVE: P-256
+root@n:~# openssl ec -in mainspork.pem -noout -text
+read EC key
+Private-Key: (256 bit)
+priv:
+    4c:fa:c1:8c:c6:46:92:5c:07:53:bf:cb:90:e7:7b:
+    83:0b:0a:3a:48:fe:88:45:d1:80:12:aa:68:ea:f3:
+    4c
+pub: 
+    04d2e42de868a2d18bc7b47014eb86a4fa0da4bc6a8af465545584c6c6fad540555067f98ce7a9c39feb4fafae6add531ac50966201a17a20ed261931763a0da81
+ASN1 OID: prime256v1
+NIST CURVE: P-256
+root@n:~# openssl ec -in testnetspork.pem -noout -text 
+read EC key
+Private-Key: (256 bit)
+priv:
+    00:d0:e1:f1:6e:a6:19:6c:e3:b1:a7:ff:e6:e2:58:
+    11:23:c0:5e:57:01:fe:94:79:fc:cf:e5:48:12:35:
+    57:4d:9b
+pub: 
+    04b9cd253c3532cfac97dde141c532d06640eca55c4f2397331373694c285c3a4a8ac6d778c1cd6c1feb7668889261d84361033f78b4b12632e065bd5095e329e9
+ASN1 OID: prime256v1
+NIST CURVE: P-256
+
+
+root@n:~# python genesis.py -a X11 -z "quantic a big community for the improvement of the future" -p 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1 -t 1555307655
+python: can't open file 'genesis.py': [Errno 2] No such file or directory
+root@n:~# cd GenesisH0/
+root@n:~/GenesisH0# python genesis.py -a X11 -z "quantic a big community for the improvement of the future" -p 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1 -t 1555307655
+04ffff001d0104397175616e74696320612062696720636f6d6d756e69747920666f722074686520696d70726f76656d656e74206f662074686520667574757265
+algorithm: X11
+merkle hash: 890458fae56e9d377f02e0be5c76a9ad3b98f6c9a153bea84907927e3d8c66e7
+pszTimestamp: quantic a big community for the improvement of the future
+pubkey: 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1
+time: 1555307655
+bits: 0x1e0ffff0
+Searching for genesis hash..
+genesis hash found!
+nonce: 334072
+genesis hash: 000001d4a0ef85fda76d37d3a16969a8b1a29899b6686009cf773dce77a2c1a6
+root@n:~/GenesisH0# python genesis.py -a X11 -z "quantic a big community for the improvement of the future" -p 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1 -t 1555307656
+04ffff001d0104397175616e74696320612062696720636f6d6d756e69747920666f722074686520696d70726f76656d656e74206f662074686520667574757265
+algorithm: X11
+merkle hash: 890458fae56e9d377f02e0be5c76a9ad3b98f6c9a153bea84907927e3d8c66e7
+pszTimestamp: quantic a big community for the improvement of the future
+pubkey: 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1
+time: 1555307656
+bits: 0x1e0ffff0
+Searching for genesis hash..
+genesis hash found!
+nonce: 778668
+genesis hash: 00000819bd1e049079f11eccc6d20820bd997eab1e8cee2fcc18ff22f70dee07
+root@n:~/GenesisH0# python genesis.py -a X11 -z "quantic a big community for the improvement of the future" -p 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1 -t 1555307657 -b0x207fffff 
+04ffff001d0104397175616e74696320612062696720636f6d6d756e69747920666f722074686520696d70726f76656d656e74206f662074686520667574757265
+algorithm: X11
+merkle hash: 890458fae56e9d377f02e0be5c76a9ad3b98f6c9a153bea84907927e3d8c66e7
+pszTimestamp: quantic a big community for the improvement of the future
+pubkey: 04fc7b96e4279af1942302a453821f2f3482732e8a8a88bd966097f55599ade2eadcf52aca4974f0457cbd24bb5c1b7e01b94366646ab543755d81b64ce8162cf1
+time: 1555307657
+bits: 0x207fffff
+Searching for genesis hash..
+genesis hash found!
+nonce: 1
+genesis hash: 12f82b2562a6279de1ba6f2f8dc19baaf6af8e1a4f167a8e4c5a12ccb6e89e57
+
+
+

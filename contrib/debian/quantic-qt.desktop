@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=quantic
+Comment=quantic P2P Cryptocurrency
+Comment[fr]=quantic, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=quantic, eşten eşe kriptografik sanal para birimi
+Exec=quantic-qt %u
+Terminal=false
+Type=Application
+Icon=quantic128
+MimeType=x-scheme-handler/quantic;
+Categories=Office;Finance;

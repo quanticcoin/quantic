@@ -1,0 +1,11 @@
+[Protocol]
+exec=quantic-qt '%u'
+protocol=quantic
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false
