@@ -8,6 +8,7 @@ sudo apt-get install libqrencode-dev
 sudo add-apt-repository ppa:bitcoin/bitcoin
 sudo apt-get update
 sudo apt-get install libdb4.8-dev libdb4.8++-dev
+sudo apt install libzmq3-dev
 
 chmod -R 755 Quantic
 ./autogen.sh && ./configure --with-incompatible-bdb && sudo make install
